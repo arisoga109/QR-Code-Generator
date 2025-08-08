@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>สร้าง QR Code</title>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            color: #f8f8f8;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+        }
+        h1 {
+            color: #ff3333;
+            text-shadow: 0 0 20px #ff6666;
+        }
+        input {
+            padding: 12px;
+            width: 300px;
+            margin-bottom: 15px;
+            border: 1px solid #ff6666;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: #1a1a1a;
+            background-color: #ff3333;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+        button:hover {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+        }
+        #qrcode-wrapper {
+            display: none; /* ซ่อนกรอบไว้ตอนแรก */
+            margin: 25px auto;
+        }
+        #qrcode-container {
+            display: inline-block;
+            padding: 1cm;
+            background-color: #ffffff;
+            border: 2px solid #ff6666;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+        }
+        #downloadButton {
+            margin-top: 15px;
+            background-color: #cc0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #downloadButton:hover {
+            background-color: #fff;
+            color: #cc0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>สร้าง QR Code by จ.ส.ต.วสันต์ ขุมทอง</h1>
+        <input type="text" id="linkInput" placeholder="วางลิงก์ของคุณที่นี่">
+        <button onclick="generateQRCode()">สร้าง QR Code</button>
+        <div id="qrcode-wrapper">
+            <div id="qrcode-container"></div>
+            <button id="downloadButton" onclick="downloadQRCode()">บันทึกรูปภาพ</button>
+        </div>
+    </div>
+
+    <script>
+        function generateQRCode() {
+            var link = document.getElementById('linkInput').value;
+            var qrcodeContainer = document.getElementById('qrcode-container');
+            var qrcodeWrapper = document.getElementById('qrcode-wrapper');
+
+            qrcodeContainer.innerHTML = '';
+
+            if (link) {
+                new QRCode(qrcodeContainer, {
+                    text: link,
+                    width: 500,
+                    height: 500,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+                // แสดงกรอบและปุ่มดาวน์โหลดเมื่อสร้างสำเร็จ
+                qrcodeWrapper.style.display = 'block';
+            } else {
+                alert('กรุณาใส่ลิงก์');
+                qrcodeWrapper.style.display = 'none'; // ซ่อนกรอบถ้าไม่มีลิงก์
+            }
+        }
+
+        function downloadQRCode() {
+            var qrcodeContainer = document.getElementById('qrcode-container');
+            var qrcodeCanvas = qrcodeContainer.querySelector('canvas');
+
+            if (qrcodeCanvas) {
+                var link = document.createElement('a');
+                link.href = qrcodeCanvas.toDataURL("image/png");
+                link.download = 'qrcode_image.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    </script>
+</body>
+</html>
