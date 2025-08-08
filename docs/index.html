@@ -64,6 +64,15 @@
             border: 2px solid #ff6666;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
         }
+        #link-details {
+            margin-top: 10px;
+            font-size: 14px;
+            word-wrap: break-word; /* เพื่อให้ข้อความยาวๆ ขึ้นบรรทัดใหม่ */
+        }
+        #filename-input {
+            margin-top: 15px;
+            width: 250px;
+        }
         #downloadButton {
             margin-top: 15px;
             background-color: #cc0000;
@@ -84,6 +93,8 @@
         <button onclick="generateQRCode()">สร้าง QR Code</button>
         <div id="qrcode-wrapper">
             <div id="qrcode-container"></div>
+            <p id="link-details"></p>
+            <input type="text" id="filename-input" placeholder="ตั้งชื่อไฟล์ที่ต้องการดาวน์โหลด">
             <button id="downloadButton" onclick="downloadQRCode()">บันทึกรูปภาพ</button>
         </div>
     </div>
@@ -93,8 +104,12 @@
             var link = document.getElementById('linkInput').value;
             var qrcodeContainer = document.getElementById('qrcode-container');
             var qrcodeWrapper = document.getElementById('qrcode-wrapper');
+            var linkDetails = document.getElementById('link-details');
+            var filenameInput = document.getElementById('filename-input');
 
             qrcodeContainer.innerHTML = '';
+            linkDetails.textContent = '';
+            filenameInput.value = '';
 
             if (link) {
                 new QRCode(qrcodeContainer, {
@@ -105,6 +120,7 @@
                     colorLight : "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H
                 });
+                linkDetails.textContent = "ลิงก์: " + link;
                 qrcodeWrapper.style.display = 'block';
             } else {
                 alert('กรุณาใส่ลิงก์');
@@ -115,12 +131,14 @@
         function downloadQRCode() {
             var qrcodeContainer = document.getElementById('qrcode-container');
             var qrcodeCanvas = qrcodeContainer.querySelector('canvas');
+            var filename = document.getElementById('filename-input').value;
 
             if (qrcodeCanvas) {
                 var image = qrcodeCanvas.toDataURL("image/png");
                 var link = document.createElement('a');
                 link.href = image;
-                link.download = 'qrcode_image.png';
+                // ตั้งชื่อไฟล์ตามที่ผู้ใช้กรอก หรือใช้ชื่อเริ่มต้นถ้าไม่มี
+                link.download = (filename.trim() !== '') ? filename + '.png' : 'qrcode_image.png';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
