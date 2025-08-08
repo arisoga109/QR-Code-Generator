@@ -54,7 +54,7 @@
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
         }
         #qrcode-wrapper {
-            display: none; /* ซ่อนกรอบไว้ตอนแรก */
+            display: none;
             margin: 25px auto;
         }
         #qrcode-container {
@@ -105,11 +105,10 @@
                     colorLight : "#ffffff",
                     correctLevel : QRCode.CorrectLevel.H
                 });
-                // แสดงกรอบและปุ่มดาวน์โหลดเมื่อสร้างสำเร็จ
                 qrcodeWrapper.style.display = 'block';
             } else {
                 alert('กรุณาใส่ลิงก์');
-                qrcodeWrapper.style.display = 'none'; // ซ่อนกรอบถ้าไม่มีลิงก์
+                qrcodeWrapper.style.display = 'none';
             }
         }
 
@@ -118,8 +117,9 @@
             var qrcodeCanvas = qrcodeContainer.querySelector('canvas');
 
             if (qrcodeCanvas) {
+                var image = qrcodeCanvas.toDataURL("image/png");
                 var link = document.createElement('a');
-                link.href = qrcodeCanvas.toDataURL("image/png");
+                link.href = image;
                 link.download = 'qrcode_image.png';
                 document.body.appendChild(link);
                 link.click();
